@@ -2,8 +2,11 @@
   <div id="app">
     <el-container>
       <el-header style="padding: 0px">
-        <div class="logo" @click="goHome">
+        <div class="textlogo" @click="goHome" v-if="title">
           {{ title }}
+        </div>
+        <div class="logo" @click="goHome" v-else>
+          <img height="35" src="/logo.png" />
         </div>
         <el-menu mode="horizontal" @select="handleSelect">
           <el-menu-item
@@ -116,7 +119,7 @@ export default {
         message: `账号注册成功，请登录`,
       });
       this.showRegisterBox = false;
-      this.loadSiteConfig()
+      this.loadSiteConfig();
     },
     goHome() {
       this.$router.push("/");
@@ -178,7 +181,7 @@ li {
   font-size: 12px;
 }
 
-.logo {
+.textlogo {
   z-index: 10;
   position: absolute;
   left: 20px;
@@ -187,5 +190,13 @@ li {
   font-weight: 600;
   line-height: 60px;
   color: #66b1ff;
+}
+
+.logo {
+  z-index: 10;
+  position: absolute;
+  left: 20px;
+  padding-top: 12px;
+  cursor: pointer;
 }
 </style>
