@@ -7,7 +7,7 @@
 
 **NextList** 下一个列表程序。
 
-本项目是前端程序，详细说明以及使用说明请访问(NextList)(https://github.com/lixiaofei123/nextlist)
+本项目是前端程序，详细说明以及使用说明请访问后端仓库[NextList](https://github.com/lixiaofei123/nextlist)
 
 
 
