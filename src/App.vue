@@ -33,7 +33,7 @@
         </el-card>
       </el-main>
       <el-footer>
-        <span class="footer">{{ copyright }}</span>
+        <span class="footer" v-html="copyright"></span>
       </el-footer>
     </el-container>
     <Login
