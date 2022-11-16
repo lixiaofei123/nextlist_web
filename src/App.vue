@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" @dragenter="dragenter">
     <el-container>
       <el-header style="padding: 0px">
         <div class="textlogo" @click="goHome" v-if="title">
@@ -79,6 +79,9 @@ export default {
   },
   methods: {
     ...mapActions(["setUserinfo", "resetUserinfo"]),
+    dragenter(){
+      this.$root.$emit("dragenter")
+    },
     handleSelect(key) {
       if (key === "login") {
         this.showRegisterBox = false;

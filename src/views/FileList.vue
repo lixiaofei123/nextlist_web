@@ -312,6 +312,7 @@
         </li>
       </ul>
     </div>
+    <DropBox @fileDrop="fileDrops"  v-if="userinfo.userName && normalPCMode"></DropBox>
   </div>
 </template>
 
@@ -335,6 +336,7 @@ import util from "../common/util";
 import HelpTips from "../components/HelpTips.vue";
 import MusicBox from "../components/MusicBox.vue";
 import VideoBox from "../components/VideoBox.vue";
+import DropBox from "../components/DropBox.vue";
 var moment = require("moment"); // require
 import { mapGetters } from "vuex";
 var cookies = require("vue-cookie");
@@ -348,6 +350,7 @@ export default {
     VueMasonryWall,
     MusicBox,
     VideoBox,
+    DropBox
   },
   mixins: [util],
   data() {
@@ -810,6 +813,14 @@ export default {
           message: `重试3次以后仍有未上传成功的文件!!!!`,
         });
       }
+    },
+    fileDrops(files){
+      let that = this;
+      let uploadFiles = []
+      for(let i = 0; i < files.length;i++){
+        uploadFiles.push(files[i])
+      }
+      that.uploadFiles(that, uploadFiles, 0);
     },
     uploadFile() {
       let that = this;
