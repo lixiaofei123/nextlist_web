@@ -3,65 +3,32 @@
     <div>
       <div slot="header" class="clearfix">
         <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item v-for="(item, index) in navs" v-bind:key="item.id"
-            ><a v-if="index !== navs.length - 1" @click="godir(item)">{{
-              item.name
-            }}</a
-            ><span v-else>{{ item.name }}</span></el-breadcrumb-item
-          >
+          <el-breadcrumb-item v-for="(item, index) in navs" v-bind:key="item.id"><a v-if="index !== navs.length - 1"
+              @click="godir(item)">{{
+                  item.name
+              }}</a><span v-else>{{ item.name }}</span></el-breadcrumb-item>
         </el-breadcrumb>
         <div class="newbtn">
-          <el-button
-            :type="masonryMode ? 'primary' : ''"
-            size="small"
-            @click="activeMode('masonry')"
-            :circle="smallScreenMode"
-            icon="el-icon-picture"
-            v-if="imageList.length !== 0"
-            ><span v-if="!smallScreenMode">看图模式</span></el-button
-          >
-          <el-button
-            :type="musicMode ? 'primary' : ''"
-            size="small"
-            @click="activeMode('music')"
-            :circle="smallScreenMode"
-            icon="el-icon-headset"
-            v-if="musicList.length !== 0"
-            ><span v-if="!smallScreenMode">音乐模式</span></el-button
-          >
-          <el-button
-            :type="videoMode ? 'primary' : ''"
-            size="small"
-            @click="activeMode('video')"
-            :circle="smallScreenMode"
-            icon="el-icon-video-camera"
-            v-if="videoList.length !== 0"
-            ><span v-if="!smallScreenMode">看剧模式</span></el-button
-          >
+          <el-button :type="masonryMode ? 'primary' : ''" size="small" @click="activeMode('masonry')"
+            :circle="smallScreenMode" icon="el-icon-picture" v-if="imageList.length !== 0"><span
+              v-if="!smallScreenMode">看图模式</span></el-button>
+          <el-button :type="musicMode ? 'primary' : ''" size="small" @click="activeMode('music')"
+            :circle="smallScreenMode" icon="el-icon-headset" v-if="musicList.length !== 0"><span
+              v-if="!smallScreenMode">音乐模式</span></el-button>
+          <el-button :type="videoMode ? 'primary' : ''" size="small" @click="activeMode('video')"
+            :circle="smallScreenMode" icon="el-icon-video-camera" v-if="videoList.length !== 0"><span
+              v-if="!smallScreenMode">看剧模式</span></el-button>
 
-          <el-button
-            type="primary"
-            size="small"
-            icon="el-icon-search"
-            circle
-            @click="search"
-            v-if="normalPCMode"
-          ></el-button
-          >&nbsp;&nbsp;
+          <el-button type="primary" size="small" icon="el-icon-search" circle @click="search" v-if="normalPCMode">
+          </el-button>&nbsp;&nbsp;
           <el-dropdown v-if="userinfo.userName && normalPCMode">
             <el-button type="primary" size="small">
               添加<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item icon="el-icon-folder"
-                ><a @click="newDict">新建文件夹</a></el-dropdown-item
-              >
-              <el-dropdown-item icon="el-icon-upload"
-                ><a @click="uploadFile">上传文件</a></el-dropdown-item
-              >
-              <el-dropdown-item icon="el-icon-refresh"
-                ><a @click="syncDir()">数据同步</a></el-dropdown-item
-              >
+              <el-dropdown-item icon="el-icon-folder"><a @click="newDict">新建文件夹</a></el-dropdown-item>
+              <el-dropdown-item icon="el-icon-upload"><a @click="uploadFile">上传文件</a></el-dropdown-item>
+              <el-dropdown-item icon="el-icon-refresh"><a @click="syncDir()">数据同步</a></el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -74,42 +41,25 @@
         <el-button size="small">视频({{ count.video }})</el-button>
         <el-button size="small">电子书({{ count.book }})</el-button>
         <el-button size="small">压缩包({{ count.tar }})</el-button>
-        <el-button size="small"
-          >总大小({{ wellSize(count.totalSize) }})</el-button
-        >
+        <el-button size="small">总大小({{ wellSize(count.totalSize) }})</el-button>
       </div>
 
       <div v-if="!masonryMode && !musicMode && !videoMode">
         <div style="height: 25px" @click="clickSelectCheckbox">
-          <el-checkbox
-            :indeterminate="
-              selectItems.length > 0 && selectItems.length !== files.length
-            "
-            :value="selectItems.length === files.length && files.length != 0"
-          >
-            <span v-if="selectItems.length === 0"
-              >一共有{{ files.length }}项</span
-            >
+          <el-checkbox :indeterminate="
+            selectItems.length > 0 && selectItems.length !== files.length
+          " :value="selectItems.length === files.length && files.length != 0">
+            <span v-if="selectItems.length === 0">一共有{{ files.length }}项</span>
             <span v-else>选择了{{ selectItems.length }}项</span>
           </el-checkbox>
         </div>
 
-        <el-table
-          class="filearea"
-          :data="files"
-          v-loading="loaddingData"
-          @row-click="rowClick"
-          @cell-mouse-enter="cellMouseEnter"
-          @cell-mouse-leave="cellMouseLeave"
-        >
+        <el-table class="filearea" :data="files" v-loading="loaddingData" @row-click="rowClick"
+          @cell-mouse-enter="cellMouseEnter" @cell-mouse-leave="cellMouseLeave">
           <el-table-column width="30" column-key="selectbox">
             <template slot-scope="scope">
-              <el-checkbox
-                style="width: 10px"
-                v-model="scope.row.selected"
-                v-if="scope.row.selected || scope.row.showChecked"
-                :label="scope.row.id"
-              ></el-checkbox>
+              <el-checkbox style="width: 10px" v-model="scope.row.selected"
+                v-if="scope.row.selected || scope.row.showChecked" :label="scope.row.id"></el-checkbox>
             </template>
           </el-table-column>
 
@@ -117,50 +67,23 @@
             <template slot-scope="scope">
               <i v-bind:class="fileIcon(scope.row)"></i>
               <span style="margin-left: 10px">
-                <a
-                  v-if="!scope.row.isDict && scope.row.fileStatus === 1"
-                  href="javascript:void(0)"
-                  @click="openFile(scope.row)"
-                  >{{ scope.row.name }}</a
-                >
+                <a v-if="!scope.row.isDict && scope.row.fileStatus === 1" href="javascript:void(0)"
+                  @click="openFile(scope.row)">{{ scope.row.name }}</a>
                 <span v-else>{{ scope.row.name }}</span>
               </span>
-              <HelpTips
-                v-if="scope.row.permission === 2 && scope.row.isDict"
-                icon="el-icon-lock"
-                tips="这个文件夹只允许上传者访问"
-              />
-              <HelpTips
-                v-if="scope.row.permission === 1 && scope.row.isDict"
-                icon="el-icon-user-solid"
-                tips="这个文件夹只允许登录用户访问"
-              />
-              <HelpTips
-                v-if="scope.row.permission === 3 && scope.row.isDict"
-                icon="el-icon-key"
-                tips="这个文件夹已被密码保护"
-              />
+              <HelpTips v-if="scope.row.permission === 2 && scope.row.isDict" icon="el-icon-lock"
+                tips="这个文件夹只允许上传者访问" />
+              <HelpTips v-if="scope.row.permission === 1 && scope.row.isDict" icon="el-icon-user-solid"
+                tips="这个文件夹只允许登录用户访问" />
+              <HelpTips v-if="scope.row.permission === 3 && scope.row.isDict" icon="el-icon-key" tips="这个文件夹已被密码保护" />
 
-              <HelpTips
-                v-if="!scope.row.isDict && !scope.row.fileStatus"
-                icon="el-icon-warning"
-                tips="此文件已损坏或者当前正在上传中"
-              />
+              <HelpTips v-if="!scope.row.isDict && !scope.row.fileStatus" icon="el-icon-warning"
+                tips="此文件已损坏或者当前正在上传中" />
             </template>
           </el-table-column>
-          <el-table-column
-            prop="userName"
-            label="上传者"
-            width="80"
-            v-if="!smallScreenMode"
-          >
+          <el-table-column prop="userName" label="上传者" width="80" v-if="!smallScreenMode">
           </el-table-column>
-          <el-table-column
-            prop="createAt"
-            label="时间"
-            width="180"
-            v-if="!smallScreenMode"
-          >
+          <el-table-column prop="createAt" label="时间" width="180" v-if="!smallScreenMode">
           </el-table-column>
           <el-table-column label="大小" width="100" v-if="!smallScreenMode">
             <template slot-scope="scope">
@@ -176,11 +99,7 @@
             <div class="item">
               <a href="javascript:void(0)" @click="goPreview(item)">
                 <div class="block">
-                  <el-image
-                    style="width: 100%"
-                    :src="item.downloadUrls[0].downloadUrl"
-                    lazy
-                  >
+                  <el-image style="width: 100%" :src="item.downloadUrls[0].downloadUrl" lazy>
                     <div slot="placeholder" class="image-slot">
                       <i class="el-icon-picture-outline"></i>
                     </div>
@@ -196,39 +115,18 @@
         <VideoBox v-if="videoMode" :path="curPath"></VideoBox>
       </div>
 
-      <div
-        style="margin-top: 30px; height: 30px"
-        v-if="total > pageCount && !musicMode && !videoMode"
-      >
-        <el-pagination
-          style="float: right"
-          background
-          layout="prev, pager, next"
-          :page-size="pageCount"
-          :small="smallScreenMode"
-          :total="total"
-          :current-page.sync="page"
-          @current-change="goto()"
-        >
+      <div style="margin-top: 30px; height: 30px" v-if="total > pageCount && !musicMode && !videoMode">
+        <el-pagination style="float: right" background layout="prev, pager, next" :page-size="pageCount"
+          :small="smallScreenMode" :total="total" :current-page.sync="page" @current-change="goto()">
         </el-pagination>
       </div>
     </div>
     <el-dialog title="创建文件夹" :visible.sync="showMkdirDialog" width="30%">
-      <el-form
-        label-width="80px"
-        label-position="left"
-        :rules="rules"
-        ref="newdirForm"
-        :model="newfile"
-      >
+      <el-form label-width="80px" label-position="left" :rules="rules" ref="newdirForm" :model="newfile">
         <el-form-item label="名称" prop="name">
           <el-input autocomplete="off" v-model="newfile.name"></el-input>
         </el-form-item>
-        <el-form-item
-          label="访问密码"
-          prop="password"
-          v-if="newfile.permission === 3"
-        >
+        <el-form-item label="访问密码" prop="password" v-if="newfile.permission === 3">
           <el-input autocomplete="off" v-model="newfile.password"></el-input>
         </el-form-item>
 
@@ -247,46 +145,29 @@
       </span>
     </el-dialog>
     <div class="uploadProgressBox" v-if="showUploadProgressBox">
-      上传文件
-      <el-progress
-        v-if="upload.status !== ''"
-        :percentage="upload.percentage"
-        :status="upload.status"
-      ></el-progress>
-      <el-progress
-        v-if="upload.status === ''"
-        :percentage="upload.percentage"
-      ></el-progress>
+      上传文件中
+      <el-progress v-if="upload.status !== ''" :percentage="upload.percentage" :status="upload.status"></el-progress>
+      <el-progress v-if="upload.status === ''" :percentage="upload.percentage"></el-progress>
       <div style="height: 6px"></div>
       <span class="uploadTips">
         当前上传的是【{{ upload.fileName }}】，上传速度为{{
-          upload.uploadSpeed
-        }}</span
-      >
-      <span class="uploadTips"
-        >一共<span style="font-size: 14px">{{ upload.uploadTotalNum }}</span
-        >个文件，当前上传第
-        <span style="color: green; font-size: 14px">{{ upload.uploadNum }}</span
-        >个，失败
-        <span style="color: red; font-size: 14px">{{
-          upload.uploadErrorNum
-        }}</span
-        >个</span
-      >
+            upload.uploadSpeed
+        }}</span>
+    </div>
+    <div class="taskListBox" v-if="uploadTasks.length !== 0">
+      <div class="title">待上传任务列表</div>
+      <ul>
+        <li v-for="task in uploadTasks" v-bind:key="task.name">
+          <div class="name">{{task.name}}</div>
+          <div class="time">{{task.time}}</div>
+        </li>
+      </ul>
     </div>
 
-    <div
-      v-if="normalMode"
-      class="contectMenu"
-      v-bind:style="{ bottom: (beSelected ? 50 : -50) + 'px' }"
-    >
+    <div v-if="normalMode" class="contectMenu" v-bind:style="{ bottom: (beSelected ? 50 : -50) + 'px' }">
       <ul>
         <li class="menu" @click="deleteFiles">删除</li>
-        <li
-          class="menu"
-          @click="goPreview"
-          v-if="selectItems.length > 0 && !selectItems[0].isDict"
-        >
+        <li class="menu" @click="goPreview" v-if="selectItems.length > 0 && !selectItems[0].isDict">
           预览
         </li>
         <!-- <li
@@ -296,23 +177,15 @@
         >
           下载
         </li> -->
-        <li
-          class="menu"
-          @click="openDir(selectItems[0])"
-          v-if="selectItems.length > 0 && selectItems[0].isDict"
-        >
+        <li class="menu" @click="openDir(selectItems[0])" v-if="selectItems.length > 0 && selectItems[0].isDict">
           打开
         </li>
-        <li
-          class="menu"
-          @click="syncDir(selectItems[0])"
-          v-if="selectItems.length > 0 && selectItems[0].isDict"
-        >
+        <li class="menu" @click="syncDir(selectItems[0])" v-if="selectItems.length > 0 && selectItems[0].isDict">
           同步数据
         </li>
       </ul>
     </div>
-    <DropBox @fileDrop="fileDrops"  v-if="userinfo.userName && normalPCMode"></DropBox>
+    <DropBox @fileDrop="fileDrops" v-if="userinfo.userName && normalPCMode"></DropBox>
   </div>
 </template>
 
@@ -394,6 +267,8 @@ export default {
         uploadSpeed: "0k/s",
         TotalSize: 0,
       },
+      uploadTasks: [
+      ],
       newfile: {
         name: "",
         permission: 0,
@@ -409,6 +284,7 @@ export default {
           },
         ],
       },
+      uploadTaskExecutorTimer: undefined,
     };
   },
   mounted() {
@@ -430,8 +306,23 @@ export default {
     }
 
     this.countFile();
+     this.uploadTaskExecute();
+  },
+  destroyed() {
+    clearTimeout(this.uploadTaskExecutorTimer)
   },
   methods: {
+    uploadTaskExecute() {
+      // 上传任务调度，
+      this.uploadTaskExecutorTimer = setTimeout(() => {
+        let task = this.uploadTasks.shift();
+        if (task !== undefined) {
+          this.uploadFile0(this, task.fileObj, this.uploadTaskExecute, this.uploadTaskExecute)
+        } else {
+          this.uploadTaskExecute()
+        }
+      }, 500)
+    },
     fileIcon(item) {
       let fileType = this.fileType(item);
       if (fileType === "directory") {
@@ -628,8 +519,8 @@ export default {
       });
     },
     deleteFile0(item, successCallback, errorCallback) {
-      successCallback = successCallback || function () {};
-      errorCallback = errorCallback || function () {};
+      successCallback = successCallback || function () { };
+      errorCallback = errorCallback || function () { };
       if (!item.isDict) {
         SignDeleteUrl(
           item.absolutePath,
@@ -680,8 +571,17 @@ export default {
       }
     },
     uploadFile0(that, file, successCallback, errorCallback) {
-      successCallback = successCallback || function () {};
-      errorCallback = errorCallback || function () {};
+      let successCallback0 = successCallback || function () { };
+      let errorCallback0 = errorCallback || function () { };
+
+      successCallback = () => {
+        that.showUploadProgressBox = false;
+        successCallback0()
+      }
+      errorCallback = () => {
+        that.showUploadProgressBox = false;
+        errorCallback0()
+      }
 
       that.showUploadProgressBox = true;
       that.upload.percentage = 0;
@@ -720,7 +620,7 @@ export default {
                       that.upload.uploadSpeed =
                         that.wellSize(
                           ((fileSize / 100) * progress) /
-                            ((new Date().getTime() - startTime) / 1000)
+                          ((new Date().getTime() - startTime) / 1000)
                         ) + "/秒";
                     },
                     () => {
@@ -732,17 +632,11 @@ export default {
                             that.listDir(that.curPath);
                             that.countFile();
                           }
-                          setTimeout(() => {
-                            that.showUploadProgressBox = false;
-                            successCallback();
-                          }, 3000);
+                          successCallback();
                         },
                         () => {
                           that.upload.status = "exception";
-                          setTimeout(() => {
-                            that.showUploadProgressBox = false;
-                            errorCallback();
-                          }, 3000);
+                          errorCallback();
                         }
                       );
                     },
@@ -755,10 +649,7 @@ export default {
                       //失败以后删除文件
                       that.deleteFile0(ufile);
                       that.upload.status = "exception";
-                      setTimeout(() => {
-                        that.showUploadProgressBox = false;
-                        errorCallback();
-                      }, 3000);
+                      errorCallback();
                     }
                   );
                 }
@@ -782,45 +673,66 @@ export default {
         }
       );
     },
-    uploadFiles(that, files, retry) {
-      if (retry < 3) {
-        that.upload.uploadTotalNum = files.length;
-        that.upload.uploadNum = 0;
-        that.upload.uploadErrorNum = 0;
-        let uploadErrFiles = [];
-        let uploadNextFile = () => {
-          let file = files.pop();
-          that.upload.uploadNum++;
-          if (file) {
-            that.uploadFile0(that, file, uploadNextFile, () => {
-              that.upload.uploadErrorNum++;
-              uploadErrFiles.push(file);
-              uploadNextFile();
-            });
-          } else {
-            if (that.upload.uploadErrorNum > 0) {
-              //对于上传失败的数据，进行重试....
-              that.uploadFiles(that, uploadErrFiles, ++retry);
-            } else {
-              that.showUploadProgressBox = false;
-            }
-          }
-        };
-        uploadNextFile();
-      } else {
-        this.$notify.error({
-          title: "错误",
-          message: `重试3次以后仍有未上传成功的文件!!!!`,
-        });
+    uploadFiles(that, files) {
+      // 将上传任务加入到任务列表仲
+      for (let i = 0; i < files.length; i++) {
+        if (this.uploadTasks.length > 10) {
+          that.$notify.error({
+            title: "错误",
+            message: `添加上传任务失败，最多只能有10个待上传的任务`,
+          });
+          break
+        }
+
+        let file = files[i]
+        let index = this.uploadTasks.findIndex(x => x.name === file.name)
+        if (index === -1) {
+          this.uploadTasks.push({
+            name: file.name,
+            size: file.size,
+            fileObj: file,
+            time: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+          })
+        }else{
+          that.$notify.error({
+            title: "错误",
+            message: `添加上传任务失败，已存在同名任务`,
+          });
+        }
+
       }
+
+      // that.upload.uploadTotalNum = files.length;
+      // that.upload.uploadNum = 0;
+      // that.upload.uploadErrorNum = 0;
+      // let uploadErrFiles = [];
+      // let uploadNextFile = () => {
+      //   let file = files.pop();
+      //   that.upload.uploadNum++;
+      //   if (file) {
+      //     that.uploadFile0(that, file, uploadNextFile, () => {
+      //       that.upload.uploadErrorNum++;
+      //       uploadErrFiles.push(file);
+      //       uploadNextFile();
+      //     });
+      //   } else {
+      //     if (that.upload.uploadErrorNum > 0) {
+      //       //对于上传失败的数据，进行重试....
+      //       that.uploadFiles(that, uploadErrFiles);
+      //     } else {
+      //       that.showUploadProgressBox = false;
+      //     }
+      //   }
+      // };
+      // uploadNextFile();
     },
-    fileDrops(files){
+    fileDrops(files) {
       let that = this;
       let uploadFiles = []
-      for(let i = 0; i < files.length;i++){
+      for (let i = 0; i < files.length; i++) {
         uploadFiles.push(files[i])
       }
-      that.uploadFiles(that, uploadFiles, 0);
+      that.uploadFiles(that, uploadFiles);
     },
     uploadFile() {
       let that = this;
@@ -834,7 +746,7 @@ export default {
           for (let i = 0; i < this.files.length; i++) {
             files.push(this.files[i]);
           }
-          that.uploadFiles(that, files, 0);
+          that.uploadFiles(that, files);
         }
       });
       fileInput.click();
@@ -843,7 +755,7 @@ export default {
       window.location = `#${path}`;
       document.title = path;
       this.loaddingData = true;
-      successCallback = successCallback || function () {};
+      successCallback = successCallback || function () { };
       this.curPath = path;
 
       if (password) {
@@ -1174,6 +1086,7 @@ export default {
   right: 20px;
   position: absolute;
 }
+
 .uploadProgressBox {
   position: fixed;
   bottom: 20px;
@@ -1187,6 +1100,56 @@ export default {
   padding: 14px 26px 14px 13px;
   transition: opacity 0.3s, transform 0.3s, left 0.3s, right 0.3s, top 0.4s,
     bottom 0.3s;
+}
+
+.taskListBox{
+  position: fixed;
+  bottom: 140px;
+  right: 20px;
+  width: 330px;
+  border-radius: 8px;
+  border: 1px solid #ebeef5;
+  position: fixed;
+  background-color: #fff;
+  box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+  padding: 14px 26px 14px 13px;
+  transition: opacity 0.3s, transform 0.3s, left 0.3s, right 0.3s, top 0.4s,
+    bottom 0.3s;
+}
+
+.taskListBox .name{
+  color: black;
+  font-weight: 400;
+  font-size: 16px;
+  padding-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  white-space: nowrap; 
+}
+
+.taskListBox .time{
+  font-size: 12px;
+  color: #5e6d82
+}
+
+.taskListBox  .title{
+  padding: 0px;
+  font-weight: 600;
+  color: #1f2f3d;
+}
+
+.taskListBox ul,li{
+  padding: 0px;
+  margin: 0px;
+  list-style: none;
+}
+
+.taskListBox ul{
+  padding: 10px 5px 0px 5px;
+}
+
+.taskListBox ul li{
+  padding-bottom: 10px;
 }
 
 a {
