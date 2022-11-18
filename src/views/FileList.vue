@@ -243,6 +243,10 @@ export default {
       masonryMode: false,
       musicMode: false,
       videoMode: false,
+      parent:{
+        path: "",
+        permission: 0,
+      },
       masonryOptions: {
         width: 300,
         padding: {
@@ -783,6 +787,9 @@ export default {
             let items = data.data.list;
             this.total = data.data.total;
             this.curfid = data.data.extend.fileid || "";
+            this.parent.path = path;
+            this.parent.permission = data.data.extend.permission;
+
             this.files = [];
             for (let item of items) {
               item.timestamp =
@@ -831,6 +838,7 @@ export default {
     },
     newDict() {
       this.showMkdirDialog = true;
+      this.newfile.permission = this.parent.permission;
     },
     mkDir() {
       this.$refs["newdirForm"].validate((valid) => {
@@ -1075,8 +1083,7 @@ export default {
   },
 };
 </script>
-
-<style scoped>
+<style scoped >
 .filearea {
   width: 100%;
 }
@@ -1138,7 +1145,7 @@ export default {
   color: #1f2f3d;
 }
 
-.taskListBox ul,li{
+.taskListBox ul,.taskListBox li{
   padding: 0px;
   margin: 0px;
   list-style: none;

@@ -1,5 +1,5 @@
 let config = {
-    apiUrl: 'APIURL'
+    apiUrl: 'https://api.file.lixf.cc'
 }
 
 window.config = config
