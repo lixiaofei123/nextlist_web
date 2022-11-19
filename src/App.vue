@@ -9,18 +9,10 @@
           <img height="35" src="/logo.png" />
         </div>
         <el-menu mode="horizontal" @select="handleSelect">
-          <el-menu-item
-            index="login"
-            style="float: right; margin-right: 20px"
-            v-if="!userinfo.userName"
-            >登录</el-menu-item
-          >
-          <el-menu-item
-            index="register"
-            style="float: right; margin-right: 20px"
-            v-if="!userinfo.userName && allowRegister"
-            >注册</el-menu-item
-          >
+          <el-menu-item index="login" style="float: right; margin-right: 20px" v-if="!userinfo.userName && allowLogin">登录
+          </el-menu-item>
+          <el-menu-item index="register" style="float: right; margin-right: 20px"
+            v-if="!userinfo.userName && allowRegister">注册</el-menu-item>
           <el-submenu index="2" style="float: right" v-if="userinfo.userName">
             <template slot="title">{{ userinfo.userName }}</template>
             <el-menu-item index="logout">注销</el-menu-item>
@@ -36,22 +28,14 @@
         <span class="footer" v-html="copyright"></span>
       </el-footer>
     </el-container>
-    <Login
-      v-if="showLoginBox"
-      @loginSuccess="loginSuccess"
-      @loginCancel="showLoginBox = false"
-    />
+    <Login v-if="showLoginBox" @loginSuccess="loginSuccess" @loginCancel="showLoginBox = false" />
 
-    <Register
-      v-if="showRegisterBox"
-      @registerSuccess="registerSuccess"
-      @registerCancel="showRegisterBox = false"
-    />
+    <Register v-if="showRegisterBox" @registerSuccess="registerSuccess" @registerCancel="showRegisterBox = false" />
   </div>
 </template>
 
 <script>
-import { myinfo, siteConfig } from "./api/api";
+import { myinfo, siteConfig, checkSiteIsReady } from "./api/api";
 import { mapActions } from "vuex";
 import { mapGetters } from "vuex";
 
@@ -66,6 +50,7 @@ export default {
   },
   data() {
     return {
+      allowLogin: false,
       showLoginBox: false,
       showRegisterBox: false,
       allowRegister: false,
@@ -74,12 +59,18 @@ export default {
     };
   },
   mounted() {
-    this.loadSiteConfig();
-    this.loadUserInfo();
+    // 先检查站点是否已经安装好了
+    checkSiteIsReady(data => {
+      if (data.ready) {
+        this.allowLogin = true;
+        this.loadSiteConfig();
+        this.loadUserInfo();
+      }
+    })
   },
   methods: {
     ...mapActions(["setUserinfo", "resetUserinfo"]),
-    dragenter(){
+    dragenter() {
       this.$root.$emit("dragenter")
     },
     handleSelect(key) {
@@ -143,6 +134,7 @@ export default {
   top: 0;
   left: 0;
 }
+
 .container {
   max-width: 1080px;
   background: white;
@@ -169,10 +161,12 @@ li {
   flex-direction: column;
   justify-content: space-between;
 }
+
 .el-main {
   height: 100%;
   overflow: hidden;
 }
+
 .el-footer {
   display: flex;
   height: 4vh;

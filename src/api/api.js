@@ -4,16 +4,8 @@ var cookies = require("vue-cookie");
 import qs from 'qs'
 
 
-// const config = {
-//    url: "https://nextlist.lixf.ink"
-// };
-
-// const config = {
-//     url: "https://file.huiyuanai.cn"
-//  };
-
 const config = {
-    url: window.config.apiUrl
+    url: window.config.apiHost + window.config.apiVersion
  };
 
 axios.interceptors.request.use(
@@ -95,7 +87,7 @@ function listDirByPath(path, password,page,count, resolve, reject) {
     reject = reject || function () { };
     axios
         .get(
-            `${config.url}/api/dir?path=${path}&password=${password}&page=${page}&count=${count}`
+            `${config.url}/file/dir?path=${path}&password=${password}&page=${page}&count=${count}`
         )
         .then((resp) => resolve(resp.data))
         .catch((err) => reject(err));
@@ -107,7 +99,7 @@ function fileInfo(fid,password, resolve, reject) {
 
     axios
         .get(
-            `${config.url}/api/file/${fid}?password=${password}`
+            `${config.url}/file/${fid}?password=${password}`
         )
         .then((resp) => resolve(resp.data))
         .catch((err) => reject(err));
@@ -119,7 +111,7 @@ function basefileInfo(fid, resolve, reject) {
 
     axios
         .get(
-            `${config.url}/api/file/baseinfo/${fid}`
+            `${config.url}/file/baseinfo/${fid}`
         )
         .then((resp) => resolve(resp.data))
         .catch((err) => reject(err));
@@ -131,9 +123,9 @@ function mkDir(fid, name, permission,password, resolve, reject) {
     resolve = resolve || function () { };
     reject = reject || function () { };
 
-    let url = `${config.url}/admin/api/dir`
+    let url = `${config.url}/admin/dir`
     if(fid){
-        url = `${config.url}/admin/api/dir/${fid}`
+        url = `${config.url}/admin/dir/${fid}`
     }
 
     axios
@@ -154,9 +146,9 @@ function preMkFile(fid, name, fileSize, fileType, permission, resolve, reject) {
     resolve = resolve || function () { };
     reject = reject || function () { };
 
-    let url = `${config.url}/admin/api/file`
+    let url = `${config.url}/admin/file`
     if(fid){
-        url = `${config.url}/admin/api/file/${fid}`
+        url = `${config.url}/admin/file/${fid}`
     }
 
     axios
@@ -178,7 +170,7 @@ function searchFile(keyword, page, count,resolve, reject) {
     resolve = resolve || function () { };
     reject = reject || function () { };
     axios
-        .post(`${config.url}/api/search/file?page=${page}&count=${count}`, qs.stringify({
+        .post(`${config.url}/file/search?page=${page}&count=${count}`, qs.stringify({
             keyword: keyword,
         }), {
             headers: {
@@ -193,7 +185,7 @@ function SignUploadUrl(key, resolve, reject) {
     resolve = resolve || function () { };
     reject = reject || function () { };
     axios
-        .post(`${config.url}/admin/api/driver/sign/upload`, qs.stringify({
+        .post(`${config.url}/admin/driver/sign/upload`, qs.stringify({
             key: key,
         }), {
             headers: {
@@ -208,7 +200,7 @@ function SignDeleteUrl(key, resolve, reject) {
     resolve = resolve || function () { };
     reject = reject || function () { };
     axios
-        .post(`${config.url}/admin/api/driver/sign/delete`, qs.stringify({
+        .post(`${config.url}/admin/driver/sign/delete`, qs.stringify({
             key: key,
         }), {
             headers: {
@@ -223,7 +215,7 @@ function confirmFile(fileid, resolve, reject) {
     resolve = resolve || function () { };
     reject = reject || function () { };
     axios
-        .post(`${config.url}/admin/api/confirm/file/${fileid}`)
+        .post(`${config.url}/admin/confirm/file/${fileid}`)
         .then((resp) => resolve(resp.data))
         .catch((err) => reject(err));
 }
@@ -233,7 +225,7 @@ function syncFile(path, resolve, reject) {
     resolve = resolve || function () { };
     reject = reject || function () { };
     axios
-        .post(`${config.url}/admin/api/sync?path=${path}`)
+        .post(`${config.url}/admin/sync?path=${path}`)
         .then((resp) => resolve(resp.data))
         .catch((err) => reject(err));
 }
@@ -245,7 +237,7 @@ function countFile( resolve, reject) {
     resolve = resolve || function () { };
     reject = reject || function () { };
     axios
-        .post(`${config.url}/api/count/file`)
+        .post(`${config.url}/file/count`)
         .then((resp) => resolve(resp.data))
         .catch((err) => reject(err));
 }
@@ -266,7 +258,7 @@ function delFile(fid, resolve, reject) {
     resolve = resolve || function () { };
     reject = reject || function () { };
     axios
-        .delete(`${config.url}/admin/api/file/${fid}`)
+        .delete(`${config.url}/admin/file/${fid}`)
         .then((resp) => resolve(resp.data))
         .catch((err) => reject(err));
 }
@@ -309,6 +301,74 @@ function readFile(url,resolve, reject) {
         .catch((err) => reject(err));
 }
 
+// 安装所需要的接口
+
+function checkSiteIsReady(resolve, reject) {
+    resolve = resolve || function () { };
+    reject = reject || function () { };
+    axios
+        .post(`${config.url}/site/status`)
+        .then((resp) => {
+            resolve(resp.data)
+        })
+        .catch((err) => reject(err));
+}
+
+function checkDB(dbconfig, resolve, reject) {
+    resolve = resolve || function () { };
+    reject = reject || function () { };
+    axios
+        .post(`${config.url}/init/check/db`,dbconfig)
+        .then((resp) => {
+            resolve(resp.data)
+        })
+        .catch((err) => reject(err));
+}
+
+function checkDriver(driverConfig,resolve, reject) {
+    resolve = resolve || function () { };
+    reject = reject || function () { };
+    axios
+        .post(`${config.url}/init/check/driver`,driverConfig)
+        .then((resp) => {
+            resolve(resp.data)
+        })
+        .catch((err) => reject(err));
+}
+
+function installSite(siteConfig,resolve, reject) {
+    resolve = resolve || function () { };
+    reject = reject || function () { };
+    axios
+        .post(`${config.url}/init/config`,siteConfig)
+        .then((resp) => {
+            resolve(resp.data)
+        })
+        .catch((err) => reject(err));
+}
+
+function reloadSite(resolve, reject) {
+    resolve = resolve || function () { };
+    reject = reject || function () { };
+    axios
+        .post(`${config.url}/init/reload`)
+        .then((resp) => {
+            resolve(resp.data)
+        })
+        .catch((err) => reject(err));
+}
+
+function getDriverprops(resolve, reject) {
+    resolve = resolve || function () { };
+    reject = reject || function () { };
+    axios
+        .get(`${config.url}/init/driverprops`)
+        .then((resp) => {
+            resolve(resp.data)
+        })
+        .catch((err) => reject(err));
+}
+
 
 export {
     fileInfo,
@@ -329,5 +389,11 @@ export {
     basefileInfo,
     syncFile,
     siteConfig,
-    registerUser
+    registerUser,
+    checkSiteIsReady,
+    checkDB,
+    checkDriver,
+    installSite,
+    getDriverprops,
+    reloadSite
 };

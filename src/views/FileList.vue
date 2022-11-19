@@ -158,8 +158,8 @@
       <div class="title">待上传任务列表</div>
       <ul>
         <li v-for="task in uploadTasks" v-bind:key="task.name">
-          <div class="name">{{task.name}}</div>
-          <div class="time">{{task.time}}</div>
+          <div class="name">{{ task.name }}</div>
+          <div class="time">{{ task.time }}</div>
         </li>
       </ul>
     </div>
@@ -202,7 +202,8 @@ import {
   confirmFile,
   listDirByPath,
   countFile,
-  syncFile
+  syncFile,
+  checkSiteIsReady
 } from "../api/api";
 import util from "../common/util";
 
@@ -243,7 +244,7 @@ export default {
       masonryMode: false,
       musicMode: false,
       videoMode: false,
-      parent:{
+      parent: {
         path: "",
         permission: 0,
       },
@@ -302,15 +303,24 @@ export default {
     window.screenWidth = window.innerWidth;
     this.screenWidth = window.screenWidth;
 
-    let href = window.location.href;
-    if (href.indexOf("#") === -1) {
-      this.listDir("");
-    } else {
-      this.listDir(decodeURIComponent(href.substr(href.indexOf("#") + 1)));
-    }
+    // 先检查站点是否已经安装好了
+    checkSiteIsReady(data => {
+      if (data.ready) {
+        let href = window.location.href;
+        if (href.indexOf("#") === -1) {
+          this.listDir("");
+        } else {
+          this.listDir(decodeURIComponent(href.substr(href.indexOf("#") + 1)));
+        }
 
-    this.countFile();
-     this.uploadTaskExecute();
+        this.countFile();
+        this.uploadTaskExecute();
+      }else{
+        this.$router.push("/install")
+      }
+    })
+
+
   },
   destroyed() {
     clearTimeout(this.uploadTaskExecutorTimer)
@@ -697,7 +707,7 @@ export default {
             fileObj: file,
             time: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
           })
-        }else{
+        } else {
           that.$notify.error({
             title: "错误",
             message: `添加上传任务失败，已存在同名任务`,
@@ -1109,7 +1119,7 @@ export default {
     bottom 0.3s;
 }
 
-.taskListBox{
+.taskListBox {
   position: fixed;
   bottom: 140px;
   right: 20px;
@@ -1124,38 +1134,39 @@ export default {
     bottom 0.3s;
 }
 
-.taskListBox .name{
+.taskListBox .name {
   color: black;
   font-weight: 400;
   font-size: 16px;
   padding-bottom: 4px;
   overflow: hidden;
-  text-overflow: ellipsis; 
-  white-space: nowrap; 
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.taskListBox .time{
+.taskListBox .time {
   font-size: 12px;
   color: #5e6d82
 }
 
-.taskListBox  .title{
+.taskListBox .title {
   padding: 0px;
   font-weight: 600;
   color: #1f2f3d;
 }
 
-.taskListBox ul,.taskListBox li{
+.taskListBox ul,
+.taskListBox li {
   padding: 0px;
   margin: 0px;
   list-style: none;
 }
 
-.taskListBox ul{
+.taskListBox ul {
   padding: 10px 5px 0px 5px;
 }
 
-.taskListBox ul li{
+.taskListBox ul li {
   padding-bottom: 10px;
 }
 

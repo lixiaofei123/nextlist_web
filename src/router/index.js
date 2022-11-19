@@ -13,6 +13,11 @@ const routes = [
     path: '/preview',
     name: 'preview',
     component: () => import('../views/Preview.vue')
+  },
+  {
+    path: '/install',
+    name: 'install',
+    component: () => import('../views/Install.vue')
   }
 ]
 
