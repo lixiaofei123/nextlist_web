@@ -170,7 +170,7 @@
         <li class="menu" @click="goPreview" v-if="selectItems.length > 0 && !selectItems[0].isDict">
           预览
         </li>
-        <li class="menu" @click="downloadFile()" v-if="selectItems.length > 0 && !selectItems[0].isDict">
+        <li class="menu" @click="downloadFile(selectItems[0])" v-if="(selectItems.length > 0 && !selectItems[0].isDict && selectItems[0].downloadUrls.length > 0)">
           下载
         </li>
         <li class="menu" @click="openDir(selectItems[0])" v-if="selectItems.length > 0 && selectItems[0].isDict">
@@ -483,9 +483,11 @@ export default {
       // window.open(route.href, "_blank");
       this.goPreview(item);
     },
-    // downloadFile(item) {
-
-    // },
+    downloadFile(item) {
+      if(item.downloadUrls.length > 0){
+        window.open(item.downloadUrls[0].downloadUrl, "_blank");
+      }
+    },
     goPreview(item) {
       if (!item.downloadUrls) {
         item = this.selectItems[0];
