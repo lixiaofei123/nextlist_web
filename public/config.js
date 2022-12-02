@@ -1,5 +1,5 @@
 let config = {
-    apiHost: 'https://file.lixf.cc',
+    apiHost: 'http://192.168.144.42:8081',
     apiVersion: "/api/v1",
 }
 
