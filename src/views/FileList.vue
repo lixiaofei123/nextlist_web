@@ -167,16 +167,16 @@
     <div v-if="normalMode" class="contectMenu" v-bind:style="{ bottom: (beSelected ? 50 : -50) + 'px' }">
       <ul>
         <li class="menu" @click="deleteFiles">删除</li>
-        <li class="menu" @click="goPreview" v-if="selectItems.length > 0 && !selectItems[0].isDict">
+        <li class="menu" @click="goPreview(selectItems[0])" v-if="selectItems.length === 1 && !selectItems[0].isDict">
           预览
         </li>
-        <li class="menu" @click="downloadFile(selectItems[0])" v-if="(selectItems.length > 0 && !selectItems[0].isDict && selectItems[0].downloadUrls.length > 0)">
+        <li class="menu" @click="downloadFile(selectItems[0])" v-if="(selectItems.length === 1 && !selectItems[0].isDict && selectItems[0].downloadUrls.length > 0)">
           下载
         </li>
-        <li class="menu" @click="openDir(selectItems[0])" v-if="selectItems.length > 0 && selectItems[0].isDict">
+        <li class="menu" @click="openDir(selectItems[0])" v-if="selectItems.length === 1 && selectItems[0].isDict">
           打开
         </li>
-        <li class="menu" @click="syncDir(selectItems[0])" v-if="selectItems.length > 0 && selectItems[0].isDict">
+        <li class="menu" @click="syncDir(selectItems[0])" v-if="selectItems.length === 1 && selectItems[0].isDict">
           同步数据
         </li>
       </ul>
@@ -489,9 +489,6 @@ export default {
       }
     },
     goPreview(item) {
-      if (!item.downloadUrls) {
-        item = this.selectItems[0];
-      }
       let route = this.$router.resolve(`/preview#${item.id}`);
       window.open(route.href, "_blank");
     },
