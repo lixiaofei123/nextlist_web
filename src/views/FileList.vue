@@ -170,13 +170,9 @@
         <li class="menu" @click="goPreview" v-if="selectItems.length > 0 && !selectItems[0].isDict">
           预览
         </li>
-        <!-- <li
-          class="menu"
-          @click="downloadFile()"
-          v-if="selectItems.length > 0 && !selectItems[0].isDict"
-        >
+        <li class="menu" @click="downloadFile()" v-if="selectItems.length > 0 && !selectItems[0].isDict">
           下载
-        </li> -->
+        </li>
         <li class="menu" @click="openDir(selectItems[0])" v-if="selectItems.length > 0 && selectItems[0].isDict">
           打开
         </li>
@@ -315,7 +311,7 @@ export default {
 
         this.countFile();
         this.uploadTaskExecute();
-      }else{
+      } else {
         this.$router.push("/install")
       }
     })
