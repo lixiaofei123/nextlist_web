@@ -42,8 +42,11 @@
           </el-form-item>
 
           <el-form-item v-for="item in selectDrivePops" v-bind:key="item.name" :label="item.label">
-            <el-input v-model="driverConfig.config[item.name]"></el-input>
-            <span class="usage">{{ item.usage }}</span>
+            <el-input v-model="driverConfig.config[item.name]" v-if="item.type !== 'boolean'" 
+            :type="item.type==='int' ? 'number' : ''" ></el-input>
+            <el-switch v-else v-model="driverConfig.config[item.name]" active-color="#13ce66" inactive-color="#ff4949">
+            </el-switch>
+            <br><span class="usage">{{ item.usage }}</span>
           </el-form-item>
 
           <el-form-item>
