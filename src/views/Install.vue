@@ -131,7 +131,7 @@ export default {
       if (data.ready) {
         this.$router.push("/")
       } else {
-        this.driverConfig.config.host = window.config.apiHost
+        this.driverConfig.config.host = window.config.apiHost || window.location.origin;
         getDriverprops(data => {
           if (data.code === 200) {
             Object.entries(data.data).forEach((k) => {
@@ -212,6 +212,9 @@ export default {
     }
   },
   watch: {
+    selectDrivePops(){
+      this.driverConfig.config.host = window.config.apiHost || window.location.origin;
+    },
     active(newVal) {
       if (newVal === 0) {
         this.disabledStep1 = true
