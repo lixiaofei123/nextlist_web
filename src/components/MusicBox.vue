@@ -347,7 +347,7 @@ export default {
         if (this.audio.src !== this.curMusic.downloadUrl) {
           this.audio.src = this.curMusic.downloadUrl;
         }
-
+        document.title = this.curMusic.name
         if (this.curMusic.play) {
           this.audio.play();
         } else {
